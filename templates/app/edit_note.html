@@ -1,18 +1,55 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-    <title>Редактирование заметки</title>
+    <link rel="stylesheet" href="{% static 'css/style1.css'%}" type="text/css">
+    <title>Главная страница</title>
 </head>
 <body class="container">
-    <form method="POST">
+    <h2>Создание новой таблицы (введите имя уже существующей чтобы добавитьв  неё запись)</h2>
+    <form method="POST" action="add_note/">
         {% csrf_token %}
         <p>
-            <label>Отредактируйте запись (если хотите удалить её, оставьте пустую строку)</label><br>
-            <input type="text" name="text" value="{{note.text}}" />
+            <label>Введите заметку</label><br>
+            <input type="text" name="note" />
+        </p>
+        <p>
+            <label>Введите имя таблицы</label><br>
+            <input type="text" name="title_name" />
         </p>
         <input type="submit" value="Сохранить">
     </form>
+    <h2>Таблицы</h2>
+    {% for table, note_set in tables.items %}
+    <table>
+        <thead><td>{{ table.name }}</th>
+        <th>
+        </th>
+        </thead>
+        {% for note in note_set %}
+            {% if note.id != id %}
+                <tr>
+                    <td>{{ note.text }}</td>
+                    <th>
+                    </th>
+                </tr>
+            {% else %}
+                <form method="POST" action="submit/">
+                    {% csrf_token %}
+                    <thead>
+                    <td>
+                        <input type="text" name="text" value="{{note.text}}" />
+                    </td>
+                    <th>
+                         <input type="submit" value="Сохранить">
+                    </th>
+                    </thead>
+                </form>
+            {% endif %}
+        {% endfor %}
+        </table>
+    {% endfor %}
 </body>
 </html>
