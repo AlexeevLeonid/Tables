@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <title>Главная страница</title>
+</head>
+<body class="container">
+    <h2>Создание новой таблицы (введите имя уже существующей чтобы добавитьв  неё запись)</h2>
+    <form method="POST" action="add_note/">
+        {% csrf_token %}
+        <p>
+            <label>Введите заметку</label><br>
+            <input type="text" name="note" />
+        </p>
+        <p>
+            <label>Введите имя таблицы</label><br>
+            <input type="text" name="title_name" />
+        </p>
+        <input type="submit" value="Сохранить" >
+    </form>
+    <h2>Таблицы</h2>
+    {% for table, note_set in tables.items %}
+    <table>
+        <thead><th>{{ table.name }}</th>
+        <th>
+             <a href="edit_title/{{table.id}}">Изменить</a>
+        </th>
+        </thead>
+        {% for note in note_set %}
+        <tr>
+            <td>{{ note.text }}</td>
+            <th>
+             <a href="edit_note/{{note.id}}">Изменить</a>
+        </th>
+        </tr>
+        {% endfor %}
+        <form method="POST" action="add_row/">
+            {% csrf_token %}
+            <tr>
+                <input type="hidden" name="table_id" value="{{table.id}}">
+                <td><input type="text" name="note" /></td>
+                <td><input type="submit" value="ок" ></td>
+            </tr>
+        </form>
+        </table>
+    {% endfor %}
+</body>
+</html>
