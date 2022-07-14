@@ -13,8 +13,21 @@ def index(request):
     tables = {}
     for i in titles:
         tables[i] = Note.objects.filter(id_title=i)
-
     return render(request, "app/home.html", {"tables": tables})
+
+def edit_title(request, id):
+    titles = Title.objects.all()
+    tables = {}
+    for i in titles:
+        tables[i] = Note.objects.filter(id_title=i)
+    return render(request, "app/edit_title.html", {"tables": tables, "id": id})
+
+def edit_note(request, id):
+    titles = Title.objects.all()
+    tables = {}
+    for i in titles:
+        tables[i] = Note.objects.filter(id_title=i)
+    return render(request, "app/edit_note.html", {"tables": tables, "id": id})
 
 
 #внесение в бд заметки в таблицу по пришедшему имени таблицы (если такой таблицы нет, создаётся новая)
@@ -35,7 +48,7 @@ def add_row(request):
 
 
 #редактирование названия таблицы (если пришла пустая строка, удаление таблицы)
-def edit_title(request, id):
+def edit_title_submit(request, id):
     try:
         title = Title.objects.get(id=id)
         if request.method == "POST":
@@ -54,7 +67,7 @@ def edit_title(request, id):
 
 
 #редактирование заметки (если пришла пустая строка, удаление заметки)
-def edit_note(request, id):
+def edit_note_submit(request, id):
     try:
         note = Note.objects.get(id=id)
         if request.method == "POST":
