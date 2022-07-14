@@ -7,7 +7,7 @@ from .models import Title, Note
 
 
 
-# получение данных из бд
+# получение данных из бд и отправка их в виде словаря таблица - QuerySet заметок
 def index(request):
     titles = Title.objects.all()
     tables = {}
@@ -17,6 +17,7 @@ def index(request):
     return render(request, "app/home.html", {"tables": tables})
 
 
+#внесение в бд заметки в таблицу по пришедшему имени таблицы (если такой таблицы нет, создаётся новая)
 def add_note(request):
     if request.method == "POST":
         title, created = Title.objects.get_or_create(name=request.POST.get("title_name"))
@@ -25,6 +26,7 @@ def add_note(request):
     return HttpResponseRedirect("/")
 
 
+#добавление в точно существующую таблицу новой заметки
 def add_row(request):
     if request.method == "POST":
         title = Title.objects.get(id=request.POST.get("table_id"))
@@ -32,6 +34,7 @@ def add_row(request):
     return HttpResponseRedirect("/")
 
 
+#редактирование названия таблицы (если пришла пустая строка, удаление таблицы)
 def edit_title(request, id):
     try:
         title = Title.objects.get(id=id)
@@ -50,6 +53,7 @@ def edit_title(request, id):
          return HttpResponseNotFound("<h2>Person not found</h2>")
 
 
+#редактирование заметки (если пришла пустая строка, удаление заметки)
 def edit_note(request, id):
     try:
         note = Note.objects.get(id=id)
