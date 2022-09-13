@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.http import HttpResponseNotFound
+from django.db.models import Count
 from django.template import RequestContext
 
 from .models import Title, Note
@@ -8,8 +9,9 @@ from .models import Title, Note
 
 
 # получение данных из бд и отправка их в виде словаря таблица - QuerySet заметок
-def index(request):
-    titles = Title.objects.all()
+def home(request):
+
+    titles = Title.objects.annotate(count=Count('note')).order_by('count')
     tables = {}
     for i in titles:
         tables[i] = Note.objects.filter(id_title=i)
@@ -23,11 +25,9 @@ def edit_title(request, id):
     return render(request, "app/edit_title.html", {"tables": tables, "id": id})
 
 def edit_note(request, id):
-    titles = Title.objects.all()
-    tables = {}
-    for i in titles:
-        tables[i] = Note.objects.filter(id_title=i)
-    return render(request, "app/edit_note.html", {"tables": tables, "id": id})
+    table = Note.objects.get(id=id).id_title
+    note_set = Note.objects.filter(id_title=table)
+    return render(request, "app/edit_note.html", {"table": table, "note_set": note_set, "id": id})
 
 
 #внесение в бд заметки в таблицу по пришедшему имени таблицы (если такой таблицы нет, создаётся новая)

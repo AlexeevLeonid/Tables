@@ -1,11 +1,17 @@
-body{
-
-}
-
 table{
-    border-collapse: collapse; /* Убираем двойные линии между ячейками */
-    border: 2px solid black;
+    border-collapse: collapse;
 }
-td{
-    width: 500px;
+
+.border-box{
+    border: 6px solid #7922CC;
+    border-radius: 25px;
+    background-color: #EEDDFF;
+    min-width: 30%;
+}
+
+input{
+    background-color: #FFEEFF;
+}
+table input{
+    width: 100%;
 }

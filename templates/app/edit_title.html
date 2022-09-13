@@ -1,3 +1,4 @@
+
 {% load static %}
 <!DOCTYPE html>
 <html>
@@ -7,49 +8,36 @@
     <link rel="stylesheet" href="{% static 'css/style1.css'%}" type="text/css">
     <title>Главная страница</title>
 </head>
-<body class="container">
-    <h2>Создание новой таблицы (введите имя уже существующей чтобы добавитьв  неё запись)</h2>
-    <form method="POST" action="add_note/">
-        {% csrf_token %}
-        <p>
-            <label>Введите заметку</label><br>
-            <input type="text" name="note" />
-        </p>
-        <p>
-            <label>Введите имя таблицы</label><br>
-            <input type="text" name="title_name" />
-        </p>
-        <input type="submit" value="Сохранить">
-    </form>
-    <h2>Таблицы</h2>
-    {% for table, note_set in tables.items %}
-    <table>
-    {% if table.id != id %}
-        <thead><td>{{ table.name }}</td>
-        <th>
-        </th>
-        </thead>
-    {% else %}
-        <form method="POST" action="submit/">
-            {% csrf_token %}
-            <thead>
-            <td>
-                <input type="text" name="text" value="{{table.name}}" />
-            </td>
-            <th>
-                 <input type="submit" value="Сохранить">
-            </th>
-            </thead>
-        </form>
-        {% endif %}
-        {% for note in note_set %}
-        <tr>
-            <td>{{ note.text }}</td>
-            <th>
-        </th>
-        </tr>
-        {% endfor %}
-        </table>
-    {% endfor %}
+<body>
+    <div class="container">
+        <div class="row">
+            {% for table, note_set in tables.items %}
+                {% if table.id == id %}
+                <div class="col-6 p-30 m-1 border-box">
+                    <table class="table">
+                        <form method="POST" action="submit/">
+                            {% csrf_token %}
+                            <thead>
+                            <td>
+                                <input type="text" name="text" value="{{table.name}}" />
+                            </td>
+                            <th>
+                                 <input type="submit" value="Сохранить">
+                            </th>
+                            </thead>
+                        </form>
+                        {% for note in note_set %}
+                        <tr>
+                            <td><div class="text-wrap text-break">{{ note.text }}</div></td>
+                            <th>
+                            </th>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
 </body>
 </html>
