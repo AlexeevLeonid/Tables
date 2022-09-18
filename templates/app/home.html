@@ -7,47 +7,62 @@
     <link rel="stylesheet" href="{% static 'css/style1.css'%}" type="text/css">
     <title>Главная страница</title>
 </head>
-<body class="container">
-    <h2>Создание новой таблицы (введите имя уже существующей чтобы добавитьв  неё запись)</h2>
-    <form method="POST" action="add_note/">
-        {% csrf_token %}
-        <p>
-            <label>Введите заметку</label><br>
-            <input type="text" name="note" />
-        </p>
-        <p>
-            <label>Введите имя таблицы</label><br>
-            <input type="text" name="title_name" />
-        </p>
-        <input type="submit" value="Сохранить" >
-    </form>
-    <h2>Таблицы</h2>
-    {% for table, note_set in tables.items %}
-    <table>
-        <thead><td>{{ table.name }}</td>
-        <th>
-             <a href="edit_title/{{table.id}}">Изменить</a>
-        </th>
-        </thead>
-        {% for note in note_set %}
-        <tr>
-            <td>{{ note.text }}</td>
-            <th><form method="POST" action="edit_note/{{note.id}}/">
-                    {% csrf_token %}
-                    <input type="submit" value="изменить">
-                </form>
-            </th>
-        </tr>
-        {% endfor %}
-        <form method="POST" action="add_row/">
-            {% csrf_token %}
-            <tr>
-                <input type="hidden" name="table_id" value="{{table.id}}">
-                <td><input type="text" name="note" /></td>
-                <th><input type="submit" value="добавить" ></th>
-            </tr>
-        </form>
-        </table>
-    {% endfor %}
+<body>
+    <div class="container">
+        <div class="w-75 p-3 m-3 border-box">
+            <h2>Создание новой таблицы (введите имя уже существующей чтобы добавить в неё запись)</h2>
+            <form method="POST" action="add_note/">
+                {% csrf_token %}
+                <p>
+                    <label>Введите заметку</label><br>
+                    <input type="text" name="note" />
+                </p>
+                <p>
+                    <label>Введите имя таблицы</label><br>
+                    <input type="text" name="title_name" />
+                </p>
+                <input type="submit" value="Сохранить" >
+            </form>
+        </div>
+        <div class="row">
+            {% for table, note_set in tables.items %}
+                <div class="col p-30 m-1 border-box">
+                    <table class="table">
+                        <thead>
+                        <td>
+                            <h3>
+                                <div class="text-wrap text-break minw">
+                                    {{ table.name }}
+                                </div>
+                            </h3>
+                        </td>
+                        <th>
+                             <a href="edit_title/{{table.id}}">Изменить</a>
+                        </th>
+                        </thead>
+                        {% for note in note_set %}
+                        <tr>
+                            <td><div class="text-wrap text-break">{{ note.text }}</div></td>
+                            <th>
+                                <form method="POST" action="edit_note/{{note.id}}/">
+                                    {% csrf_token %}
+                                    <input type="submit" value="изменить">
+                                </form>
+                            </th>
+                        </tr>
+                        {% endfor %}
+                        <form method="POST" action="add_row/">
+                            {% csrf_token %}
+                            <tr>
+                                <input type="hidden" name="table_id" value="{{table.id}}">
+                                <td><input type="text" name="note" /></td>
+                                <th><input type="submit" value="добавить" ></th>
+                            </tr>
+                        </form>
+                    </table>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
 </body>
 </html>

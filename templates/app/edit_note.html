@@ -1,3 +1,5 @@
+
+
 {% load static %}
 <!DOCTYPE html>
 <html>
@@ -7,49 +9,39 @@
     <link rel="stylesheet" href="{% static 'css/style1.css'%}" type="text/css">
     <title>Главная страница</title>
 </head>
-<body class="container">
-    <h2>Создание новой таблицы (введите имя уже существующей чтобы добавитьв  неё запись)</h2>
-    <form method="POST" action="add_note/">
-        {% csrf_token %}
-        <p>
-            <label>Введите заметку</label><br>
-            <input type="text" name="note" />
-        </p>
-        <p>
-            <label>Введите имя таблицы</label><br>
-            <input type="text" name="title_name" />
-        </p>
-        <input type="submit" value="Сохранить">
-    </form>
-    <h2>Таблицы</h2>
-    {% for table, note_set in tables.items %}
-    <table>
-        <thead><td>{{ table.name }}</th>
-        <th>
-        </th>
-        </thead>
-        {% for note in note_set %}
-            {% if note.id != id %}
-                <tr>
-                    <td>{{ note.text }}</td>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-6 p-30 m-1 border-box">
+                <table class="table">
+                    <thead><th>{{ table.name }}</th>
                     <th>
-                    </th>
-                </tr>
-            {% else %}
-                <form method="POST" action="submit/">
-                    {% csrf_token %}
-                    <thead>
-                    <td>
-                        <input type="text" name="text" value="{{note.text}}" />
-                    </td>
-                    <th>
-                         <input type="submit" value="Сохранить">
                     </th>
                     </thead>
-                </form>
-            {% endif %}
-        {% endfor %}
-        </table>
-    {% endfor %}
+                    {% for note in note_set %}
+                        {% if note.id != id %}
+                            <tr>
+                                <td>{{ note.text }}</td>
+                                <th>
+                                </th>
+                            </tr>
+                        {% else %}
+                        <form method="POST" action="submit/">
+                            {% csrf_token %}
+                            <thead>
+                            <td>
+                                <input type="text" name="text" value="{{note.text}}" />
+                            </td>
+                            <th>
+                                 <input type="submit" value="Сохранить">
+                            </th>
+                            </thead>
+                        </form>
+                        {% endif %}
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
